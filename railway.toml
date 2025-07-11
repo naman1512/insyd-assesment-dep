@@ -1,0 +1,14 @@
+# Railway Deployment Configuration
+start = "npm run server"
+build = "npm install && npx prisma generate"
+
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile.backend"
+
+[deploy]
+restartPolicyType = "on-failure"
+
+[environments.production]
+DATABASE_URL = "file:./data/production.db"
+NODE_ENV = "production"
