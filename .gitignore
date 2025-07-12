@@ -42,3 +42,16 @@ next-env.d.ts
 
 # documents
 INTERVIEW.md*
+
+# backend folder (moved to separate repository)
+backend/
+
+# deployment documentation files
+BACKEND_DEPLOYMENT.md
+FRONTEND_DEPLOYMENT.md
+DEPLOYMENT_CHECKLIST.md
+SEPARATE_REPO_SETUP.md
+MONOREPO_OPTION.md
+DEPLOYMENT.md
+GITHUB_DEPLOYMENT.md
+VERCEL_DEPLOYMENT.md
