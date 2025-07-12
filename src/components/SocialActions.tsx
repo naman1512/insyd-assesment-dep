@@ -14,8 +14,6 @@ export default function SocialActions() {
   const [newPost, setNewPost] = useState({ title: '', content: '' });
   const [isCreatingPost, setIsCreatingPost] = useState(false);
 
-  console.log('SocialActions render:', { currentUser, users, usersLength: users?.length });
-
   const loadPosts = useCallback(async () => {
     try {
       const postsList = await apiService.getPosts();
@@ -51,10 +49,10 @@ export default function SocialActions() {
       await apiService.followUser(userId, currentUser.id);
       await loadFollowing();
       const user = users?.find(u => u.id === userId);
-      showToast(`Now following ${user?.username || 'user'}`, 'success', 3000);
+      showToast(`Now following ${user?.username || 'user'}`, 'success');
     } catch (error) {
       console.error('Failed to follow user:', error);
-      showToast('Failed to follow user', 'error', 3000);
+      showToast('Failed to follow user', 'error');
     }
   };
 
@@ -64,10 +62,10 @@ export default function SocialActions() {
       await apiService.unfollowUser(userId, currentUser.id);
       await loadFollowing();
       const user = users?.find(u => u.id === userId);
-      showToast(`Unfollowed ${user?.username || 'user'}`, 'info', 3000);
+      showToast(`Unfollowed ${user?.username || 'user'}`, 'info');
     } catch (error) {
       console.error('Failed to unfollow user:', error);
-      showToast('Failed to unfollow user', 'error', 3000);
+      showToast('Failed to unfollow user', 'error');
     }
   };
 
@@ -86,15 +84,10 @@ export default function SocialActions() {
       setNewPost({ title: '', content: '' });
       setIsCreatingPost(false);
       
-      // Show success message
-      showToast(
-        `Post created! ${result.notificationsSent} notifications sent to followers.`,
-        'success',
-        4000
-      );
+      showToast(`Post created! ${result.notificationsSent} notifications sent.`, 'success');
     } catch (error) {
       console.error('Failed to create post:', error);
-      showToast('Failed to create post', 'error', 3000);
+      showToast('Failed to create post', 'error');
     }
   };
 
@@ -106,27 +99,19 @@ export default function SocialActions() {
 
   if (!currentUser) {
     return (
-      <div className="bg-gradient-to-br from-white to-gray-100 rounded-lg p-6 shadow-xl border border-gray-200">
-        <div className="text-center py-12">
-          <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <div className="text-gray-500 text-2xl">👤</div>
-          </div>
-          <p className="text-gray-600 text-lg">Please select a user</p>
-          <p className="text-gray-500 text-sm mt-2">Choose a user to access social actions</p>
+      <div className="bg-white rounded-lg p-6 shadow-lg border">
+        <div className="text-center py-8">
+          <p className="text-gray-600">Please select a user to access social features</p>
         </div>
       </div>
     );
   }
 
-  // Don't render until users are loaded
   if (!users || users.length === 0) {
     return (
-      <div className="bg-gradient-to-br from-white to-gray-100 rounded-lg p-6 shadow-xl border border-gray-200">
-        <div className="text-center py-12">
-          <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <div className="text-gray-500 text-2xl">⏳</div>
-          </div>
-          <p className="text-gray-600 text-lg">Loading users...</p>
+      <div className="bg-white rounded-lg p-6 shadow-lg border">
+        <div className="text-center py-8">
+          <p className="text-gray-600">Loading users...</p>
         </div>
       </div>
     );
@@ -134,53 +119,43 @@ export default function SocialActions() {
 
   return (
     <div className="space-y-6">
-      {/* Create Post */}
-      <div className="bg-gradient-to-br from-white to-gray-100 rounded-lg p-6 shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300 hover:bg-gradient-to-br hover:from-gray-50 hover:to-gray-200">
-        <div className="flex items-center mb-6">
-          <div className="w-3 h-3 bg-gray-800 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-gray-800">Create Post</h2>
-        </div>
+      <div className="bg-white rounded-lg p-6 shadow-lg border">
+        <h2 className="text-xl font-semibold mb-4 text-gray-900">Create Post</h2>
         {!isCreatingPost ? (
           <button
             onClick={() => setIsCreatingPost(true)}
-            className="w-full bg-gray-800 text-white font-semibold py-4 px-6 rounded-lg hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
           >
-            ✨ Create New Post
+            Create New Post
           </button>
         ) : (
-          <form onSubmit={handleCreatePost} className="space-y-4">
-            <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2">Post Title</label>
-              <input
-                type="text"
-                placeholder="Enter an engaging title..."
-                value={newPost.title}
-                onChange={(e) => setNewPost(prev => ({ ...prev, title: e.target.value }))}
-                className="w-full p-4 bg-white border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-200"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2">Content</label>
-              <textarea
-                placeholder="Share your thoughts with the architecture community..."
-                value={newPost.content}
-                onChange={(e) => setNewPost(prev => ({ ...prev, content: e.target.value }))}
-                className="w-full p-4 bg-white border border-gray-300 rounded-lg text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent transition-all duration-200 h-32 resize-none"
-                required
-              />
-            </div>
-            <div className="flex space-x-3">
+          <form onSubmit={handleCreatePost} className="space-y-3">
+            <input
+              type="text"
+              placeholder="Post title"
+              value={newPost.title}
+              onChange={(e) => setNewPost(prev => ({ ...prev, title: e.target.value }))}
+              className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+            <textarea
+              placeholder="What's on your mind?"
+              value={newPost.content}
+              onChange={(e) => setNewPost(prev => ({ ...prev, content: e.target.value }))}
+              className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 resize-none"
+              required
+            />
+            <div className="flex space-x-2">
               <button
                 type="submit"
-                className="flex-1 bg-gray-800 text-white font-semibold py-3 px-6 rounded-lg hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
               >
-                Publish
+                Post
               </button>
               <button
                 type="button"
                 onClick={() => setIsCreatingPost(false)}
-                className="flex-1 bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg hover:bg-gray-400 hover:text-gray-800 transition-all duration-200 shadow-md"
+                className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 transition-colors"
               >
                 Cancel
               </button>
@@ -189,32 +164,28 @@ export default function SocialActions() {
         )}
       </div>
 
-      {/* Users to Follow */}
-      <div className="bg-gradient-to-br from-white to-gray-100 rounded-lg p-6 shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300 hover:bg-gradient-to-br hover:from-gray-50 hover:to-gray-200">
-        <div className="flex items-center mb-6">
-          <div className="w-3 h-3 bg-gray-800 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-gray-800">Connect</h2>
-        </div>
+      <div className="bg-white rounded-lg p-6 shadow-lg border">
+        <h2 className="text-xl font-semibold mb-4 text-gray-900">Users</h2>
         <div className="space-y-3">
           {otherUsers.filter(user => user && user.username).map(user => (
-            <div key={user.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all duration-200 group shadow-md hover:shadow-lg hover:border-gray-300">
+            <div key={user.id} className="flex items-center justify-between p-3 border rounded hover:bg-gray-50 transition-colors">
               <div className="flex items-center">
-                <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center shadow-md mr-4 group-hover:scale-105 transition-transform duration-200">
-                  <span className="text-white font-bold text-lg">
+                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                  <span className="text-white text-sm font-medium">
                     {user.username.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <div className="font-semibold text-gray-800 text-lg group-hover:text-gray-900">{user.username}</div>
-                  <div className="text-gray-600 text-sm group-hover:text-gray-700">{user.email}</div>
+                  <div className="font-medium text-gray-900">{user.username}</div>
+                  <div className="text-sm text-gray-600">{user.email}</div>
                 </div>
               </div>
               <button
                 onClick={() => isFollowing(user.id) ? handleUnfollow(user.id) : handleFollow(user.id)}
-                className={`px-6 py-2 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg ${
+                className={`px-4 py-1 rounded text-sm transition-colors ${
                   isFollowing(user.id)
-                    ? 'bg-gray-300 text-gray-700 border border-gray-300 hover:bg-gray-400 hover:text-gray-800 hover:border-gray-400'
-                    : 'bg-gray-800 text-white hover:bg-gray-700'
+                    ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
                 }`}
               >
                 {isFollowing(user.id) ? 'Unfollow' : 'Follow'}
@@ -224,41 +195,30 @@ export default function SocialActions() {
         </div>
       </div>
 
-      {/* Recent Posts */}
-      <div className="bg-gradient-to-br from-white to-gray-100 rounded-lg p-6 shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300 hover:bg-gradient-to-br hover:from-gray-50 hover:to-gray-200">
-        <div className="flex items-center mb-6">
-          <div className="w-3 h-3 bg-gray-800 rounded-full mr-3"></div>
-          <h2 className="text-2xl font-bold text-gray-800">Recent Posts</h2>
-        </div>
+      <div className="bg-white rounded-lg p-6 shadow-lg border">
+        <h2 className="text-xl font-semibold mb-4 text-gray-900">Recent Posts</h2>
         {posts.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <div className="text-gray-500 text-2xl">📝</div>
-            </div>
-            <p className="text-gray-600 text-lg">No posts yet</p>
-            <p className="text-gray-500 text-sm mt-2">Be the first to share something!</p>
+          <div className="text-center py-8">
+            <p className="text-gray-600">No posts yet</p>
+            <p className="text-sm text-gray-500 mt-1">Be the first to share something!</p>
           </div>
         ) : (
           <div className="space-y-4">
             {posts.filter(post => post && post.user && post.user.username).slice(0, 5).map(post => (
-              <div key={post.id} className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-all duration-200 group shadow-md hover:shadow-lg hover:border-gray-300">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center shadow-md mr-3 group-hover:scale-105 transition-transform duration-200">
-                      <span className="text-white font-bold">
-                        {post.user.username.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-800 text-lg group-hover:text-gray-900">{post.title}</h3>
-                      <span className="text-gray-600 text-sm group-hover:text-gray-700">
-                        by {post.user.username}
-                      </span>
-                    </div>
+              <div key={post.id} className="p-4 border rounded hover:bg-gray-50 transition-colors">
+                <div className="flex items-center mb-2">
+                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mr-2">
+                    <span className="text-white text-xs font-medium">
+                      {post.user.username.charAt(0).toUpperCase()}
+                    </span>
                   </div>
+                  <span className="text-sm text-gray-600">
+                    {post.user.username}
+                  </span>
                 </div>
-                <p className="text-gray-700 mb-3 leading-relaxed group-hover:text-gray-800">{post.content}</p>
-                <p className="text-xs text-gray-500 group-hover:text-gray-600">
+                <h3 className="font-medium text-gray-900 mb-1">{post.title}</h3>
+                <p className="text-gray-700 mb-2">{post.content}</p>
+                <p className="text-xs text-gray-500">
                   {new Date(post.createdAt).toLocaleString()}
                 </p>
               </div>

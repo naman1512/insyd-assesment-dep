@@ -46,12 +46,19 @@ INTERVIEW.md*
 # backend folder (moved to separate repository)
 backend/
 
-# deployment documentation files
-BACKEND_DEPLOYMENT.md
-FRONTEND_DEPLOYMENT.md
-DEPLOYMENT_CHECKLIST.md
-SEPARATE_REPO_SETUP.md
-MONOREPO_OPTION.md
-DEPLOYMENT.md
-GITHUB_DEPLOYMENT.md
-VERCEL_DEPLOYMENT.md
+# all markdown documentation files
+*.md
+!README.md
+
+# deployment scripts and configuration files
+deploy-*.bat
+deploy-*.sh
+deploy.bat
+deploy.sh
+docker-compose*.yml
+Dockerfile.*
+nginx.conf
+railway.toml
+
+# environment files (keep examples)
+.env.production
