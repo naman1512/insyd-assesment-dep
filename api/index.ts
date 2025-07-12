@@ -1,71 +1,22 @@
+// Vercel Serverless Function - Main API
 import express from 'express';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 
-dotenv.config();
-
 const app = express();
-const server = createServer(app);
-
-// CORS configuration for different environments
-const corsOrigins = process.env.NODE_ENV === 'production' 
-  ? ['https://your-frontend-domain.com'] // Replace with your actual domain
-  : ['http://localhost:3000'];
-
-const io = new Server(server, {
-  cors: {
-    origin: corsOrigins,
-    methods: ["GET", "POST", "DELETE", "PATCH"]
-  }
-});
-
 const prisma = new PrismaClient();
-const PORT = process.env.PORT || 3001;
 
-// Middleware
+// CORS configuration for Vercel
 app.use(cors({
-  origin: corsOrigins,
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL || 'https://your-frontend.vercel.app']
+    : ['http://localhost:3000'],
   methods: ['GET', 'POST', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type']
 }));
+
 app.use(express.json());
-
-// Store active socket connections
-const activeConnections = new Map<string, string>(); // userId -> socketId
-
-// Socket.IO connection handling
-io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
-
-  // User joins with their ID
-  socket.on('join', (userId: string) => {
-    activeConnections.set(userId, socket.id);
-    socket.join(userId);
-    console.log(`User ${userId} joined with socket ${socket.id}`);
-  });
-
-  socket.on('disconnect', () => {
-    // Remove from active connections
-    for (const [userId, socketId] of activeConnections.entries()) {
-      if (socketId === socket.id) {
-        activeConnections.delete(userId);
-        break;
-      }
-    }
-    console.log('User disconnected:', socket.id);
-  });
-});
-
-// Helper function to send real-time notifications
-const sendRealTimeNotification = (userId: string, notification: unknown) => {
-  if (activeConnections.has(userId)) {
-    io.to(userId).emit('notification', notification);
-  }
-};
 
 // API Routes
 
@@ -148,7 +99,7 @@ app.post('/api/users/:userId/follow', async (req, res) => {
     });
 
     // Create notification
-    const notification = await prisma.notification.create({
+    await prisma.notification.create({
       data: {
         id: uuidv4(),
         userId: userId,
@@ -158,9 +109,6 @@ app.post('/api/users/:userId/follow', async (req, res) => {
         data: JSON.stringify({ followerId, followerUsername: follower?.username })
       }
     });
-
-    // Send real-time notification
-    sendRealTimeNotification(userId, notification);
 
     res.json({ message: 'Successfully followed user' });
   } catch (error) {
@@ -220,7 +168,7 @@ app.post('/api/posts', async (req, res) => {
     // Create notifications for all followers
     const notifications = await Promise.all(
       followers.map(async (follow) => {
-        const notification = await prisma.notification.create({
+        return await prisma.notification.create({
           data: {
             id: uuidv4(),
             userId: follow.followerId,
@@ -230,11 +178,6 @@ app.post('/api/posts', async (req, res) => {
             data: JSON.stringify({ postId: post.id, authorId: userId, authorUsername: user?.username })
           }
         });
-
-        // Send real-time notification
-        sendRealTimeNotification(follow.followerId, notification);
-
-        return notification;
       })
     );
 
@@ -321,10 +264,9 @@ app.get('/api/users/:userId/following', async (req, res) => {
 });
 
 // Health check
-app.get('/health', (req, res) => {
+app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Export for Vercel
+export default app;

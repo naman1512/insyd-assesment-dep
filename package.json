@@ -16,7 +16,10 @@
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f",
     "deploy:local": "npm run docker:dev",
-    "deploy:prod": "npm run docker:prod"
+    "deploy:prod": "npm run docker:prod",
+    "deploy:backend": "deploy-backend.bat",
+    "deploy:frontend": "deploy-frontend.bat",
+    "deploy:vercel": "deploy-backend.bat && deploy-frontend.bat"
   },
   "dependencies": {
     "@prisma/client": "^6.11.1",
