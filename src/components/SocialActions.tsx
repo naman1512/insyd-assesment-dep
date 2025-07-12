@@ -99,9 +99,12 @@ export default function SocialActions() {
 
   if (!currentUser) {
     return (
-      <div className="bg-white rounded-lg p-6 shadow-lg border">
-        <div className="text-center py-8">
-          <p className="text-gray-600">Please select a user to access social features</p>
+      <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
+        <div className="text-center py-12">
+          <div className="w-16 h-16 bg-gradient-to-br from-slate-600 to-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-2xl">👤</span>
+          </div>
+          <p className="text-slate-300 text-lg">Select a user to start creating and sharing</p>
         </div>
       </div>
     );
@@ -109,9 +112,12 @@ export default function SocialActions() {
 
   if (!users || users.length === 0) {
     return (
-      <div className="bg-white rounded-lg p-6 shadow-lg border">
-        <div className="text-center py-8">
-          <p className="text-gray-600">Loading users...</p>
+      <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50 shadow-2xl">
+        <div className="text-center py-12">
+          <div className="animate-pulse">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-4"></div>
+          </div>
+          <p className="text-slate-300 text-lg">Loading the social universe...</p>
         </div>
       </div>
     );
@@ -119,43 +125,51 @@ export default function SocialActions() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg p-6 shadow-lg border">
-        <h2 className="text-xl font-semibold mb-4 text-gray-900">Create Post</h2>
+      <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50 shadow-2xl">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            Create
+          </h2>
+          <div className="w-2 h-2 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full animate-pulse"></div>
+        </div>
         {!isCreatingPost ? (
           <button
             onClick={() => setIsCreatingPost(true)}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-6 rounded-xl hover:from-purple-500 hover:to-pink-500 transition-all duration-300 font-medium shadow-lg border border-purple-500/20 group"
           >
-            Create New Post
+            <span className="flex items-center justify-center space-x-2">
+              <span className="text-xl group-hover:scale-110 transition-transform duration-300">✨</span>
+              <span>Share Something Amazing</span>
+            </span>
           </button>
         ) : (
-          <form onSubmit={handleCreatePost} className="space-y-3">
+          <form onSubmit={handleCreatePost} className="space-y-4">
             <input
               type="text"
-              placeholder="Post title"
+              placeholder="Give it a catchy title..."
               value={newPost.title}
               onChange={(e) => setNewPost(prev => ({ ...prev, title: e.target.value }))}
-              className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
               required
             />
             <textarea
-              placeholder="What's on your mind?"
+              placeholder="What's inspiring you today?"
               value={newPost.content}
               onChange={(e) => setNewPost(prev => ({ ...prev, content: e.target.value }))}
-              className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 h-24 resize-none"
+              className="w-full p-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 h-32 resize-none"
               required
             />
-            <div className="flex space-x-2">
+            <div className="flex space-x-3">
               <button
                 type="submit"
-                className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
+                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-xl hover:from-purple-500 hover:to-pink-500 transition-all duration-300 font-medium shadow-lg"
               >
-                Post
+                Share
               </button>
               <button
                 type="button"
                 onClick={() => setIsCreatingPost(false)}
-                className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 transition-colors"
+                className="flex-1 bg-slate-700 text-slate-300 py-3 px-4 rounded-xl hover:bg-slate-600 transition-all duration-300 font-medium border border-slate-600/50"
               >
                 Cancel
               </button>
@@ -164,61 +178,74 @@ export default function SocialActions() {
         )}
       </div>
 
-      <div className="bg-white rounded-lg p-6 shadow-lg border">
-        <h2 className="text-xl font-semibold mb-4 text-gray-900">Users</h2>
-        <div className="space-y-3">
+      <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50 shadow-2xl">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+            Connect
+          </h2>
+          <div className="w-2 h-2 bg-gradient-to-r from-green-400 to-emerald-400 rounded-full animate-pulse"></div>
+        </div>
+        <div className="space-y-3 max-h-80 overflow-y-auto">
           {otherUsers.filter(user => user && user.username).map(user => (
-            <div key={user.id} className="flex items-center justify-between p-3 border rounded hover:bg-gray-50 transition-colors">
+            <div key={user.id} className="flex items-center justify-between p-4 border border-slate-600/30 rounded-xl hover:bg-gradient-to-r hover:from-green-500/10 hover:to-emerald-500/10 hover:border-green-500/30 transition-all duration-300 group">
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-3">
-                  <span className="text-white text-sm font-medium">
+                <div className="w-10 h-10 bg-gradient-to-br from-slate-600 to-slate-700 group-hover:from-green-500 group-hover:to-emerald-600 rounded-full flex items-center justify-center mr-4 transition-all duration-300 shadow-lg">
+                  <span className="text-slate-200 group-hover:text-white font-bold transition-colors duration-300">
                     {user.username.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">{user.username}</div>
-                  <div className="text-sm text-gray-600">{user.email}</div>
+                  <div className="font-bold text-slate-100 group-hover:text-white transition-colors duration-300">{user.username}</div>
+                  <div className="text-sm text-slate-300 group-hover:text-slate-200 transition-colors duration-300">{user.email}</div>
                 </div>
               </div>
               <button
                 onClick={() => isFollowing(user.id) ? handleUnfollow(user.id) : handleFollow(user.id)}
-                className={`px-4 py-1 rounded text-sm transition-colors ${
+                className={`px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${
                   isFollowing(user.id)
-                    ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                    ? 'bg-slate-700 text-slate-300 hover:bg-slate-600 border border-slate-600/50'
+                    : 'bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-500 hover:to-emerald-500 shadow-lg'
                 }`}
               >
-                {isFollowing(user.id) ? 'Unfollow' : 'Follow'}
+                {isFollowing(user.id) ? 'Following' : 'Follow'}
               </button>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-white rounded-lg p-6 shadow-lg border">
-        <h2 className="text-xl font-semibold mb-4 text-gray-900">Recent Posts</h2>
+      <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50 shadow-2xl">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+            Feed
+          </h2>
+          <div className="w-2 h-2 bg-gradient-to-r from-orange-400 to-red-400 rounded-full animate-pulse"></div>
+        </div>
         {posts.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-600">No posts yet</p>
-            <p className="text-sm text-gray-500 mt-1">Be the first to share something!</p>
+          <div className="text-center py-12">
+            <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">📝</span>
+            </div>
+            <p className="text-slate-300 text-lg mb-2">The feed awaits your creativity</p>
+            <p className="text-slate-400 text-sm">Share the first post and start the conversation!</p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-96 overflow-y-auto">
             {posts.filter(post => post && post.user && post.user.username).slice(0, 5).map(post => (
-              <div key={post.id} className="p-4 border rounded hover:bg-gray-50 transition-colors">
-                <div className="flex items-center mb-2">
-                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center mr-2">
-                    <span className="text-white text-xs font-medium">
+              <div key={post.id} className="p-4 border border-slate-600/30 rounded-xl hover:bg-gradient-to-r hover:from-orange-500/10 hover:to-red-500/10 hover:border-orange-500/30 transition-all duration-300 group">
+                <div className="flex items-center mb-3">
+                  <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-700 group-hover:from-orange-500 group-hover:to-red-600 rounded-full flex items-center justify-center mr-3 transition-all duration-300 shadow-lg">
+                    <span className="text-slate-200 group-hover:text-white text-xs font-bold transition-colors duration-300">
                       {post.user.username.charAt(0).toUpperCase()}
                     </span>
                   </div>
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-slate-300 group-hover:text-slate-200 transition-colors duration-300 font-medium">
                     {post.user.username}
                   </span>
                 </div>
-                <h3 className="font-medium text-gray-900 mb-1">{post.title}</h3>
-                <p className="text-gray-700 mb-2">{post.content}</p>
-                <p className="text-xs text-gray-500">
+                <h3 className="font-bold text-slate-100 group-hover:text-white mb-2 transition-colors duration-300">{post.title}</h3>
+                <p className="text-slate-300 group-hover:text-slate-200 mb-3 transition-colors duration-300 leading-relaxed">{post.content}</p>
+                <p className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors duration-300">
                   {new Date(post.createdAt).toLocaleString()}
                 </p>
               </div>

@@ -42,48 +42,53 @@ export default function UserSelector() {
   };
 
   return (
-    <div className="bg-white rounded-lg p-6 shadow-lg border">
-      <h2 className="text-xl font-semibold mb-4 text-gray-900">Select User</h2>
+    <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50 shadow-2xl">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          Users
+        </h2>
+        <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full animate-pulse"></div>
+      </div>
       
       {currentUser ? (
-        <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-          <div className="flex items-center mb-3">
-            <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
-              <span className="text-white font-medium">
+        <div className="mb-6 p-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20 backdrop-blur-sm">
+          <div className="flex items-center mb-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4 shadow-lg">
+              <span className="text-white font-bold text-lg">
                 {currentUser.username.charAt(0).toUpperCase()}
               </span>
             </div>
             <div>
-              <p className="font-medium text-gray-900">{currentUser.username}</p>
-              <p className="text-sm text-gray-600">{currentUser.email}</p>
+              <p className="font-bold text-slate-100 text-lg">{currentUser.username}</p>
+              <p className="text-slate-300 text-sm">{currentUser.email}</p>
             </div>
           </div>
           <button
             onClick={() => setCurrentUser(null)}
-            className="w-full py-2 px-4 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors"
+            className="w-full py-3 px-4 bg-gradient-to-r from-slate-700 to-slate-600 text-slate-200 rounded-xl hover:from-slate-600 hover:to-slate-500 transition-all duration-300 font-medium border border-slate-600/50"
           >
             Switch User
           </button>
         </div>
       ) : (
-        <div className="space-y-2 mb-6">
-          {users.map(user => (
+        <div className="space-y-3 mb-6 max-h-64 overflow-y-auto">
+          {users.map((user) => (
             <button
               key={user.id}
               onClick={() => handleUserSelect(user)}
-              className="w-full p-3 text-left border rounded hover:bg-gray-50 transition-colors"
+              className="w-full p-4 text-left border border-slate-600/30 rounded-xl hover:bg-gradient-to-r hover:from-blue-500/10 hover:to-purple-500/10 hover:border-blue-500/30 transition-all duration-300 group"
             >
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-3">
-                  <span className="text-white text-sm font-medium">
+                <div className="w-10 h-10 bg-gradient-to-br from-slate-600 to-slate-700 group-hover:from-blue-500 group-hover:to-purple-600 rounded-full flex items-center justify-center mr-4 transition-all duration-300 shadow-lg">
+                  <span className="text-slate-200 group-hover:text-white text-sm font-bold transition-colors duration-300">
                     {user.username.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">{user.username}</div>
-                  <div className="text-sm text-gray-600">{user.email}</div>
+                  <div className="font-bold text-slate-100 group-hover:text-white transition-colors duration-300">{user.username}</div>
+                  <div className="text-sm text-slate-300 group-hover:text-slate-200 transition-colors duration-300">{user.email}</div>
                   {user._count && (
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-slate-400 group-hover:text-slate-300 transition-colors duration-300 mt-1">
                       {user._count.followers} followers • {user._count.following} following
                     </div>
                   )}
@@ -97,18 +102,18 @@ export default function UserSelector() {
       {!isCreating ? (
         <button
           onClick={() => setIsCreating(true)}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
+          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl hover:from-blue-500 hover:to-purple-500 transition-all duration-300 font-medium shadow-lg border border-blue-500/20"
         >
           Create New User
         </button>
       ) : (
-        <form onSubmit={handleCreateUser} className="space-y-3">
+        <form onSubmit={handleCreateUser} className="space-y-4">
           <input
             type="text"
             placeholder="Username"
             value={newUser.username}
             onChange={(e) => setNewUser(prev => ({ ...prev, username: e.target.value }))}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
             required
           />
           <input
@@ -116,20 +121,20 @@ export default function UserSelector() {
             placeholder="Email"
             value={newUser.email}
             onChange={(e) => setNewUser(prev => ({ ...prev, email: e.target.value }))}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
             required
           />
-          <div className="flex space-x-2">
+          <div className="flex space-x-3">
             <button
               type="submit"
-              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
+              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-xl hover:from-blue-500 hover:to-purple-500 transition-all duration-300 font-medium shadow-lg"
             >
               Create
             </button>
             <button
               type="button"
               onClick={() => setIsCreating(false)}
-              className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 transition-colors"
+              className="flex-1 bg-slate-700 text-slate-300 py-3 px-4 rounded-xl hover:bg-slate-600 transition-all duration-300 font-medium border border-slate-600/50"
             >
               Cancel
             </button>
